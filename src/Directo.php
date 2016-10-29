@@ -1,19 +1,48 @@
 <?php
 namespace Kfirba\Directo;
 
+use Kfirba\Directo\Exceptions\InvalidACLException;
 use Kfirba\Directo\Exceptions\InvalidRegionException;
+use Kfirba\Directo\Exceptions\InvalidOptionsException;
 
 class Directo
 {
     /**
-     * @var Signature
+     * The signing time.
+     *
+     * @var integer
      */
-    protected $signature;
+    protected $time;
+
+    /**
+     * @var string
+     */
+    protected $bucket;
+
+    /**
+     * @var string
+     */
+    protected $region;
+
+    /**
+     * @var Options
+     */
+    protected $options;
+
+    /**
+     * @var Credentials
+     */
+    protected $credentials;
 
     /**
      * @var Policy
      */
     protected $policy;
+
+    /**
+     * @var Signature
+     */
+    protected $signature;
 
     /**
      * Directo constructor.
@@ -39,12 +68,14 @@ class Directo
     ) {
         $this->validateRegion($region);
 
-        $time = time();
-        $options = $this->normalizeOptions($options);
+        $this->time = time();
+        $this->bucket = $bucket;
+        $this->region = $region;
+        $this->options = $this->normalizeOptions($options);
 
-        $credentials = $credentials ?: new Credentials($key, $region, $time);
-        $this->policy = $policy ?: new Policy($options, $credentials, $bucket, $time);
-        $this->signature = $signature ?: new Signature($secret, $region, $this->policy, $time);
+        $this->credentials = $credentials ?: new Credentials($key, $region, $this->time);
+        $this->policy = $policy ?: new Policy($this->options, $this->credentials, $bucket, $this->time);
+        $this->signature = $signature ?: new Signature($secret, $region, $this->policy, $this->time);
     }
 
     /**
@@ -67,16 +98,14 @@ class Directo
             return $options;
         }
 
-        throw new InvalidArgumentException(sprintf(
-            "The Options must to be either an instance of [%s] or an array",
-            Options::class
-        ));
+        throw new InvalidOptionsException;
     }
 
     /**
      * Validates the given region against Amazon S3 available regions.
      *
-     * @throws InvalidRegionException
+     * @param $region
+     * @throws InvalidACLException
      */
     protected function validateRegion($region)
     {
@@ -118,5 +147,71 @@ class Directo
     public function policy()
     {
         return $this->policy->generate();
+    }
+
+    /**
+     * Get the action string for the upload form.
+     *
+     * @return string
+     */
+    public function formUrl()
+    {
+        return sprintf(
+            '//%s.s3-%s.amazonaws.com',
+            $this->bucket,
+            $this->region
+        );
+    }
+
+    /**
+     * Gets the hidden inputs in array format.
+     *
+     * @return array
+     */
+    public function inputsAsArray()
+    {
+        $inputs = [
+            'Content-Type'          => $this->options->content_type,
+            'acl'                   => $this->options->acl,
+            'success_action_status' => $this->options->success_status,
+            'policy'                => $this->policy(),
+            'X-amz-credential'      => $this->credentials->AMZCredentials(),
+            'X-amz-algorithm'       => 'AWS4-HMAC-SHA256',
+            'X-amz-date'            => gmdate('Ymd\THis\Z', $this->time),
+            'X-amz-signature'       => $this->signature(),
+            'key'                   => $this->options->default_filename
+        ];
+
+        $inputs = $inputs + $this->options->additional_inputs;
+
+        return $inputs;
+    }
+
+    /**
+     * Get the hidden inputs as HTML.
+     *
+     * @return string
+     */
+    public function inputsAsHtml()
+    {
+        $inputs = [];
+        foreach ($this->inputsAsArray() as $key => $value) {
+            $inputs[] = sprintf(
+                '<input type="hidden" name="%s" value="%s"/>',
+                $key, $value
+            );
+        }
+
+        return implode(PHP_EOL, $inputs);
+    }
+
+    /**
+     * The signing time.
+     *
+     * @return int
+     */
+    public function signingTime()
+    {
+        return $this->time;
     }
 }
