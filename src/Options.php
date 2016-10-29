@@ -28,7 +28,7 @@ class Options
     protected $options = [
 
         // The http code return by Amazon S3 upon successful upload.
-        'success_status'    => 201,
+        'success_status'    => "201",
 
         // The ACL for the uploaded file. More info: http://amzn.to/1SSOgwO
         // Supported: private, public-read, public-read-write, aws-exec-read, authenticated-read,
