@@ -77,6 +77,7 @@ class DirectoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(implode(PHP_EOL, [
             '<input type="hidden" name="Content-Type" value=""/>',
             '<input type="hidden" name="acl" value="public-read"/>',
+            '<input type="hidden" name="success_action_redirect" value=""/>',
             '<input type="hidden" name="success_action_status" value="201"/>',
             '<input type="hidden" name="policy" value="'. $directo->policy() .'"/>',
             '<input type="hidden" name="X-amz-credential" value="'. (new Credentials('key', 'eu-central-1', $directo->signingTime()))->AMZCredentials() .'"/>',

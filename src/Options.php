@@ -7,7 +7,8 @@ use Kfirba\Directo\Exceptions\InvalidExpiresStringException;
 /**
  * Class Options
  *
- * @property integer success_status
+ * @property integer success_action_redirect
+ * @property integer success_action_status
  * @property string  acl
  * @property string  default_filename
  * @property int     max_file_size
@@ -27,37 +28,41 @@ class Options
      */
     protected $options = [
 
-        // The http code return by Amazon S3 upon successful upload.
-        'success_status'    => "201",
+        // The URL to which the client is redirected upon successful upload.
+        'success_action_redirect' => '',
+
+        // The status code returned to the client upon successful upload if
+        // success_action_redirect is not specified.
+        'success_action_status'   => "201",
 
         // The ACL for the uploaded file. More info: http://amzn.to/1SSOgwO
         // Supported: private, public-read, public-read-write, aws-exec-read, authenticated-read,
         //            bucket-owner-read, bucket-owner-full-control, log-delivery-write
-        'acl'               => 'public-read',
+        'acl'                     => 'public-read',
 
         // The file's name on s3, can be set with JS by changing the input[name="key"].
         // Leaving this as ${filename} will retain the original file's name.
-        'default_filename'  => '${filename}',
+        'default_filename'        => '${filename}',
 
         // The maximum file size of an upload in MB. Will refuse with a EntityTooLarge
         // and 400 Bad Request if you exceed this limit.
-        'max_file_size'     => 500,
+        'max_file_size'           => 500,
 
         // Request expiration time, specified in relative time format or in seconds.
         // min: 1 (+1 second), max: 604800 (+7 days)
-        'expires'           => '+6 hours',
+        'expires'                 => '+6 hours',
 
         // Server will check that the filename starts with this prefix
         // and fail with a AccessDenied 403 if not.
-        'valid_prefix'      => '',
+        'valid_prefix'            => '',
 
         // Strictly only allow a single content type, blank will allow all.
         // Will fail with a AccessDenied 403 if this condition is not met.
-        'content_type'      => '',
+        'content_type'            => '',
 
         // Any additional inputs to add to the form. This is an array of name => value
         // pairs e.g. ['Content-Disposition' => 'attachment']
-        'additional_inputs' => []
+        'additional_inputs'       => []
     ];
 
     /**

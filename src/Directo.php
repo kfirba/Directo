@@ -171,15 +171,16 @@ class Directo
     public function inputsAsArray()
     {
         $inputs = [
-            'Content-Type'          => $this->options->content_type,
-            'acl'                   => $this->options->acl,
-            'success_action_status' => $this->options->success_status,
-            'policy'                => $this->policy(),
-            'X-amz-credential'      => $this->credentials->AMZCredentials(),
-            'X-amz-algorithm'       => 'AWS4-HMAC-SHA256',
-            'X-amz-date'            => gmdate('Ymd\THis\Z', $this->time),
-            'X-amz-signature'       => $this->signature(),
-            'key'                   => $this->options->default_filename
+            'Content-Type'            => $this->options->content_type,
+            'acl'                     => $this->options->acl,
+            'success_action_redirect' => $this->options->success_action_redirect,
+            'success_action_status'   => $this->options->success_action_status,
+            'policy'                  => $this->policy(),
+            'X-amz-credential'        => $this->credentials->AMZCredentials(),
+            'X-amz-algorithm'         => 'AWS4-HMAC-SHA256',
+            'X-amz-date'              => gmdate('Ymd\THis\Z', $this->time),
+            'X-amz-signature'         => $this->signature(),
+            'key'                     => $this->options->default_filename
         ];
 
         $inputs = $inputs + $this->options->additional_inputs;
