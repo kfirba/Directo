@@ -118,7 +118,7 @@ The options availalbe are:
 
 | Option            | Default     | Description  |
 | ----------------- | ----------- |------------- |
-| success_action_redirect    | 201         | The URL to which the client is redirected upon successful upload. Useful if you are not using any kind of AJAX uploading mechanism. |
+| success_action_redirect    |          | The URL to which the client is redirected upon successful upload. Useful if you are not using any kind of AJAX uploading mechanism. |
 | success_action_status    | 201         | The status code returned to the client upon successful upload if `success_action_redirect` is not specified. |
 | acl               | public-read     | The ACL for the uploaded file. **Supported:** private, public-read, public-read-write, aws-exec-read, authenticated-read, bucket-owner-read, bucket-owner-full-control, log-delivery-write |
 | default_filename  | ${filename} | The file's name on s3, can be set with JS by changing the input[name="key"]. Leaving this as ${filename} will retain the original file's name. |
