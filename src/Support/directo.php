@@ -3,7 +3,7 @@
 return [
 
     // The URL to which the client is redirected upon successful upload.
-    'success_action_redirect' => null,
+    'success_action_redirect' => '',
 
     // The status code returned to the client upon successful upload if
     // success_action_redirect is not specified.
