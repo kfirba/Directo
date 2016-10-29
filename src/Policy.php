@@ -67,7 +67,8 @@ class Policy
                 ['starts-with', '$key', $this->options->valid_prefix],
                 [$contentTypePrefix, '$Content-Type', $this->options->content_type],
                 ['content-length-range', 0, $this->mbToBytes($this->options->max_file_size)],
-                ['success_action_status' => $this->options->success_status],
+                ['success_action_redirect' => $this->options->success_action_redirect],
+                ['success_action_status' => $this->options->success_action_status],
                 ['x-amz-credential' => $this->credentials->AMZCredentials()],
                 ['x-amz-algorithm' => 'AWS4-HMAC-SHA256'],
                 ['x-amz-date' => gmdate('Ymd\THis\Z', $this->time)]

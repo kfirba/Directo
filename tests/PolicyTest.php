@@ -20,14 +20,16 @@ class PolicyTest extends PHPUnit_Framework_TestCase
         $this->assertJson(base64_decode($policy));
 
         $data = json_decode(base64_decode($policy), true)['conditions'];
+
         $this->assertArrayHasKey('bucket', $data[0]);
         $this->assertArrayHasKey('acl', $data[1]);
         $this->assertEquals('$key', $data[2][1]);
         $this->assertEquals('$Content-Type', $data[3][1]);
         $this->assertEquals('content-length-range', $data[4][0]);
-        $this->assertArrayHasKey('success_action_status', $data[5]);
-        $this->assertArrayHasKey('x-amz-credential', $data[6]);
-        $this->assertArrayHasKey('x-amz-algorithm', $data[7]);
-        $this->assertArrayHasKey('x-amz-date', $data[8]);
+        $this->assertArrayHasKey('success_action_redirect', $data[5]);
+        $this->assertArrayHasKey('success_action_status', $data[6]);
+        $this->assertArrayHasKey('x-amz-credential', $data[7]);
+        $this->assertArrayHasKey('x-amz-algorithm', $data[8]);
+        $this->assertArrayHasKey('x-amz-date', $data[9]);
     }
 }

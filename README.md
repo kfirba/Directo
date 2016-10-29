@@ -1,7 +1,7 @@
 Directo
 =============
 
-A library to generate AWS Signature V4 and supplement form inputs, for direct upload to Amazon S3.
+A library to generate AWS Signature V4 and supplement form inputs, for direct upload to Amazon S3. Includes a bridge to Laravel as-well.
 
 Install
 --------
@@ -54,6 +54,22 @@ Don't forget to change `BUCKET_NAME` to your bucket name.
 
 **Note:** If you don't plan to ever upload any file with any other ACL than `private`, you may want to omit the `"s3:PutObjectAcl"`.
 
+Laravel Users
+--------
+If you are a Laravel user, the package contains a bridge for you.
+
+Update your **app.php** `providers` array and add:
+
+```php
+Kfirba\Directo\Support\DirectoServiceProvider::class,
+```
+
+Also, update your `aliases` array and add:
+
+```
+'Directo' => Kfirba\Directo\Support\Facades\Directo::class,
+```
+
 Usage
 --------
 ```javascript
@@ -73,6 +89,27 @@ Then, using the object we've just made, we can generate the form's url and all t
     <input type="file" name="file">
 </form>
 ```
+
+Laravel Users Usage
+--------
+If you are using laravel, there is a `Directo` facade you can use. Also, you can type-hint the `Directo` class in any auto-resolving class, such as any `Controller` and it will be automatically resolved.
+
+```php
+// Facade:
+Directo::formUrl();
+Directo::inputsAsHtml();
+
+// Type-hinted
+// SomeController.php:
+
+use Kfirba\Directo\Directo;
+// ...
+public function index(Directo $directo)
+{
+    dd($directo->signature());
+}
+```
+
 
 Options
 --------

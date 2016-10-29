@@ -183,7 +183,7 @@ class Directo
             'key'                     => $this->options->default_filename
         ];
 
-        $inputs = $inputs + $this->options->additional_inputs;
+        $inputs = array_merge($inputs, $this->options->additional_inputs);
 
         return $inputs;
     }
