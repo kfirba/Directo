@@ -132,12 +132,12 @@ For example:
 
 ```php
 $directo = new Directo("bucket", "region", "key", "secret", [
-        'acl' => 'private',
-        'max_file_size' => 10,
-        'additional_inputs' => [
-            'Content-Disposition' => 'attachment'
-        ]
-    ]);
+    'acl' => 'private',
+    'max_file_size' => 10,
+    'additional_inputs' => [
+        'Content-Disposition' => 'attachment'
+    ]
+]);
 ```
 
 Available Methods
