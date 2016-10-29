@@ -1,5 +1,5 @@
 {
-  "name": "kfirba/Directo",
+  "name": "kfirba/directo",
   "description": "A library to generate signatures for direct upload to Amazon S3",
   "keywords": [
     "S3 direct upload",
