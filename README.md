@@ -70,6 +70,17 @@ Also, update your `aliases` array and add:
 'Directo' => Kfirba\Directo\Support\Facades\Directo::class,
 ```
 
+The package reads your S3 configurations specified in `config/filesystems.php` under the `disks.s3` array. To change the configs, you can change the following keys in your `.env` file:
+
+```
+S3_KEY=myS3Key
+S3_SECRET=myS3Secret
+S3_REGION=eu-central-1
+S3_BUCKET=bucket
+```
+
+Laravel then reads these environment variables and set the config in `filesystems.disks.s3` which **Directo** uses.
+
 Usage
 --------
 ```javascript
