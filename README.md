@@ -175,6 +175,7 @@ Available Methods
 | policy()        | Get the policy used by the signature. |
 | inputsAsArray()       | Returns an **array** of all the inputs you'll need to submit in your form. |
 | inputsAsHtml() | Returns an **HTML string** of all the inputs you'll need to submit in your form. |
+| setOptions(`array $options`) | Allows you to change options on-the-fly. |
 
 Thumbs Up :thumbsup:
 --------
