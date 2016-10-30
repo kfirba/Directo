@@ -7,7 +7,7 @@ return [
 
     // The status code returned to the client upon successful upload if
     // success_action_redirect is not specified.
-    'success_action_status' => "201",
+    'success_action_status' => 201,
 
     // The ACL for the uploaded file. More info: http://amzn.to/1SSOgwO
     // Supported: private, public-read, public-read-write, aws-exec-read, authenticated-read,

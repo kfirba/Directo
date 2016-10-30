@@ -39,6 +39,37 @@ class Options
     }
 
     /**
+     * Merges options.
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function merge(array $options)
+    {
+        if (array_key_exists('expires', $options)) {
+            $this->validateExpiryString($options['expires']);
+        }
+
+        if (array_key_exists('acl', $options)) {
+            $this->validateACL($options['acl']);
+        }
+
+        $base = isset($this->options) ? $this->options : require('Support/directo.php');
+        $this->options = array_merge($base, $options);
+        $this->stringifySuccessStatus();
+
+        return $this;
+    }
+
+    /**
+     * Make the success_action_status a string as Amazon S3 will reject an integer.
+     */
+    protected function stringifySuccessStatus()
+    {
+        $this->options['success_action_status'] = (string) $this->options['success_action_status'];
+    }
+
+    /**
      * Validates the ACL.
      *
      * @param $acl
@@ -77,32 +108,6 @@ class Options
         if ($diff < 1 || $diff > 604800) {
             throw new InvalidExpiresStringException;
         }
-    }
-
-    /**
-     * Merges options.
-     *
-     * @param array $options
-     * @return $this
-     */
-    public function merge(array $options)
-    {
-        if (array_key_exists('expires', $options)) {
-            $this->validateExpiryString($options['expires']);
-        }
-
-        if (array_key_exists('acl', $options)) {
-            $this->validateACL($options['acl']);
-        }
-
-        if (array_key_exists('success_status', $options)) {
-            $options['success_status'] = (string) $options['success_status'];
-        }
-
-        $base = isset($this->options) ? $this->options : require('Support/directo.php');
-        $this->options = array_merge($base, $options);
-
-        return $this;
     }
 
     /**
