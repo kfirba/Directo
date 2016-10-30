@@ -4,11 +4,6 @@ namespace Kfirba\Directo;
 class Policy
 {
     /**
-     * @var string
-     */
-    protected $policy;
-
-    /**
      * @var Options
      */
     protected $options;
@@ -53,10 +48,6 @@ class Policy
      */
     public function generate()
     {
-        if (isset($this->policy)) {
-            return $this->policy;
-        }
-
         $contentTypePrefix = empty($this->options->content_type) ? 'starts-with' : 'eq';
 
         $policy = [

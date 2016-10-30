@@ -6,11 +6,6 @@ class Signature
     /**
      * @var string
      */
-    protected $signature;
-
-    /**
-     * @var string
-     */
     protected $secret;
 
     /**
@@ -45,10 +40,6 @@ class Signature
      */
     public function generate()
     {
-        if (isset($this->signature)) {
-            return $this->signature;
-        }
-
         return $this->signature = $this->keyHash(
             $this->policy->generate(), $this->signingKey(), false
         );

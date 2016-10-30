@@ -1,6 +1,7 @@
 <?php
 
 use Kfirba\Directo\Credentials;
+use Kfirba\Directo\Options;
 use Kfirba\Directo\Policy;
 use Kfirba\Directo\Directo;
 use Kfirba\Directo\Signature;
@@ -86,6 +87,15 @@ class DirectoTest extends PHPUnit_Framework_TestCase
             '<input type="hidden" name="X-amz-signature" value="'. $directo->signature() .'"/>',
             '<input type="hidden" name="key" value="${filename}"/>'
         ]), $directo->inputsAsHtml());
+    }
 
+    /** @test */
+    public function it_sets_the_options_on_the_fly()
+    {
+        $options = Mockery::mock(Options::class);
+        $options->shouldReceive('merge')->atLeast()->once();
+
+        $directo = new Directo('bucket', 'eu-central-1', 'key', 'secret', $options);
+        $directo->setOptions(['acl' => 'private']);
     }
 }

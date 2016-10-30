@@ -6,11 +6,6 @@ class Credentials
     /**
      * @var string
      */
-    protected $credentials;
-
-    /**
-     * @var string
-     */
     protected $key;
 
     /**
@@ -37,10 +32,6 @@ class Credentials
      */
     public function AMZCredentials()
     {
-        if (isset($this->credentials)) {
-            return $this->credentials;
-        }
-
         return $this->credentials = sprintf(
             '%s/%s/%s/s3/aws4_request',
             $this->key,

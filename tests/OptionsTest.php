@@ -41,4 +41,14 @@ class OptionsTest extends PHPUnit_Framework_TestCase
     {
         new Options(['expires' => '+691200 hours']); // 8 days
     }
+
+    /** @test */
+    public function it_merges_options_on_the_fly()
+    {
+        $options = new Options;
+        $this->assertEquals($options->acl, 'public-read');
+
+        $options = $options->merge(['acl' => 'private']);
+        $this->assertEquals($options->acl, 'private');
+    }
 }

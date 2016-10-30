@@ -35,19 +35,7 @@ class Options
      */
     public function __construct(array $options = [])
     {
-        if (array_key_exists('expires', $options)) {
-            $this->validateExpiryString($options['expires']);
-        }
-
-        if (array_key_exists('acl', $options)) {
-            $this->validateACL($options['acl']);
-        }
-
-        if (array_key_exists('success_status', $options)) {
-            $options['success_status'] = (string) $options['success_status'];
-        }
-
-        $this->options = array_merge(require('Support/directo.php'), $options);
+        $this->merge($options);
     }
 
     /**
@@ -89,6 +77,32 @@ class Options
         if ($diff < 1 || $diff > 604800) {
             throw new InvalidExpiresStringException;
         }
+    }
+
+    /**
+     * Merges options.
+     *
+     * @param array $options
+     * @return $this
+     */
+    public function merge(array $options)
+    {
+        if (array_key_exists('expires', $options)) {
+            $this->validateExpiryString($options['expires']);
+        }
+
+        if (array_key_exists('acl', $options)) {
+            $this->validateACL($options['acl']);
+        }
+
+        if (array_key_exists('success_status', $options)) {
+            $options['success_status'] = (string) $options['success_status'];
+        }
+
+        $base = isset($this->options) ? $this->options : require('Support/directo.php');
+        $this->options = array_merge($base, $options);
+
+        return $this;
     }
 
     /**

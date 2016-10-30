@@ -70,6 +70,21 @@ Also, update your `aliases` array and add:
 'Directo' => Kfirba\Directo\Support\Facades\Directo::class,
 ```
 
+If you need to change the some of the default settings, can either publish the  `directo.php` config to make the changes global every time you try to generate a signature or use the convenient setter **Directo** provides.
+
+```bash
+$ php artisan vendor:publish --tag=directo
+```
+
+You should now be able to find a `directo.php` file in your `config/` directory with all of the default options.
+
+```php
+// You can also change the options on-the-fly
+Directo::setOptions(['acl' => 'private'])->inputsAsArray();
+```
+
+The on-the-fly change is useful especially when you may have more than 1 form in your document and one of them may require different options than the other one. For example, a form to upload some private metrics data to S3, you will want to set the `acl` to `private` and a form to upload a profile picture which you will want to set the `acl` to atleast `public-read`.
+
 The package reads your S3 configurations specified in `config/filesystems.php` under the `disks.s3` array. To change the configs, you can change the following keys in your `.env` file:
 
 ```

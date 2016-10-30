@@ -207,6 +207,16 @@ class Directo
     }
 
     /**
+     * Merge options on the fly.
+     *
+     * @param array $options
+     */
+    public function setOptions(array $options = [])
+    {
+        $this->options->merge($options);
+    }
+
+    /**
      * The signing time.
      *
      * @return int
