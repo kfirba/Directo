@@ -13,7 +13,7 @@ Prerequisites - CORS & Bucket Policy
 --------
 In order for the upload to succeed and not get denied by Amazon S3 we will need to configure the CORS option and the bucket policy.
 
-In order to update the CORS and the bucket policy, log in to your AWS account and go to S3. Now select your bucket and click **Properties** on the top-right corner. Click on **Permissions**.
+To update the CORS and the bucket policy, log in to your AWS account and go to S3. Now select your bucket and click **Properties** on the top-right corner. Click on **Permissions**.
 
 To update the CORS configuration, click the **Edit CORS Configuration** button. I recommend the following CORS configuration:
 
@@ -50,7 +50,7 @@ To update the bucket policy, click the **Edit bucket policy** button. I recommen
 }
 ```
 
-Don't forget to change `BUCKET_NAME` to your bucket name.
+Don't forget to change `BUCKET_NAME` to your bucket's name.
 
 **Note:** If you don't plan to ever upload any file with any other ACL than `private`, you may want to omit the `"s3:PutObjectAcl"`.
 
@@ -70,7 +70,7 @@ Also, update your `aliases` array and add:
 'Directo' => Kfirba\Directo\Support\Facades\Directo::class,
 ```
 
-If you need to change the some of the default settings, can either publish the  `directo.php` config to make the changes global every time you try to generate a signature or use the convenient setter **Directo** provides.
+If you need to change some of the default settings, you can either publish the  `directo.php` config to make the changes global every time you try to generate a signature, or use the convenient setter **Directo** provides.
 
 ```bash
 $ php artisan vendor:publish --tag=directo
@@ -98,7 +98,7 @@ Laravel then reads these environment variables and set the config in `filesystem
 
 Usage
 --------
-```javascript
+```php
 use Kfirba\Directo\Directo;
 
 require_once __DIR__ . "/vendor/autoload.php";
@@ -109,7 +109,7 @@ $directo = new Directo('bucket', 'region', 'key', 'secret', $options = []);
 Then, using the object we've just made, we can generate the form's url and all the needed hidden inputs.
 
 ```php
-<form action="<?php echo $directo->formUrl()?>" method="post" ectype="multipart/form-data">
+<form action="<?php echo $directo->formUrl()?>" method="post" enctype="multipart/form-data">
     <?php echo $directo->inputsAsHtml() ?>
     
     <input type="file" name="file">
@@ -179,7 +179,7 @@ Available Methods
 
 Thumbs Up :thumbsup:
 --------
-I want to thank [Edd Turtle](https://www.designedbyaturtle.co.uk/) for guiding me in the right way with his [GREAT article](https://www.designedbyaturtle.co.uk/2015/direct-upload-to-s3-using-aws-signature-v4-php/). The purpose of this package is to make make the process of signature generating a bit more modular and create a bridge for Laravel users.
+Thanks [Edd Turtle](https://www.designedbyaturtle.co.uk/) for your [great article](https://www.designedbyaturtle.co.uk/2015/direct-upload-to-s3-using-aws-signature-v4-php/). The purpose of this package is to make make the process of signature generating a bit more modular and create a bridge for Laravel users.
 
 License
 --------
