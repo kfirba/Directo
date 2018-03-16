@@ -33,7 +33,7 @@ To update the CORS configuration, click the **Edit CORS Configuration** button. 
 
 To update the bucket policy, click the **Edit bucket policy** button. I recommend the following bucket policy:
 
-```js
+```json
 {
 	"Version": "2012-10-17",
 	"Statement": [
@@ -136,6 +136,45 @@ public function index(Directo $directo)
 }
 ```
 
+Signing a policy
+--------
+
+Sometimes, when using file uploader plugin, such as [FineUploader](http://fineuploader.com/), the plugin will send a policy to the server to be signed. Once the policy has been signed, the plugin will submit the policy and the signature to AWS as authentication key.
+
+Directo also offers the ability to sign a given policy. The policy should be either a valid json-encoded policy or a base64-encoded policy (which decodes to a valid json-encoded policy).
+
+If you already have a `Directo` object, you may simply call the `sign()` method:
+
+```php
+$directo->sign($policy);
+// =>
+// ['policy' => 'base64-encoded policy...', 'signature => 'the signature...']
+```
+
+If you don't have a `Directo` object, you may create a new one or use the underlying `Signature` object:
+
+```php
+$signature = new Signature($secret, $region, $policy);
+
+$signature->sign($policy);
+// =>
+// ['policy' => 'base64-encoded policy...', 'signature => 'the signature...']
+```
+
+The arguments that the `Signature` object needs are required for generating the `SigningKey`. The `Signature` object will parse the given policy and will extract any additional parameters it needs for the `SigningKey`.
+
+If you are a Laravel user, you can use the `Directo` facade anywhere:
+
+```php
+Directo::sign($policy);
+// =>
+// ['policy' => 'base64-encoded policy...', 'signature => 'the signature...']
+```
+
+The `sign()` method returns an array with the following keys:
+
+1. `policy` - base64 encoded string of the policy.
+2. `signature` - the signature for the aforementioned policy.
 
 Options
 --------
@@ -171,15 +210,16 @@ Available Methods
 
 | Method                | Description  |
 | --------------------- | ------------ |
-| signature()          | Get the AWS Signature (V4). Useful if you are using a plugin such as [FineUploader](http://fineuploader.com/) which requires an endpoint to return a signature. |
+| signature()          | Get the AWS Signature (V4) for the auto-generated policy.  |
 | policy()        | Get the policy used by the signature. |
+| sign() | Sign a given json/base64-encoded policies. Useful if you are using a plugin such as [FineUploader](http://fineuploader.com/) which needs an endpoint to sign a policy. |
 | inputsAsArray()       | Returns an **array** of all the inputs you'll need to submit in your form. |
 | inputsAsHtml() | Returns an **HTML string** of all the inputs you'll need to submit in your form. |
 | setOptions(`array $options`) | Allows you to change options on-the-fly. |
 
 Thumbs Up :thumbsup:
 --------
-Thanks [Edd Turtle](https://www.designedbyaturtle.co.uk/) for your [great article](https://www.designedbyaturtle.co.uk/2015/direct-upload-to-s3-using-aws-signature-v4-php/). The purpose of this package is to make make the process of signature generating a bit more modular and create a bridge for Laravel users.
+Thanks [Edd Turtle](https://www.designedbyaturtle.co.uk/) for your [great article](https://www.designedbyaturtle.co.uk/2015/direct-upload-to-s3-using-aws-signature-v4-php/). The purpose of this package is to make the process of signature generating a bit more modular, hence offer additional features, and create a bridge for Laravel users.
 
 License
 --------
