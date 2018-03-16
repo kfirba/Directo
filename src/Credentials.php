@@ -1,4 +1,5 @@
 <?php
+
 namespace Kfirba\Directo;
 
 class Credentials

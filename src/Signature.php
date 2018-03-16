@@ -1,4 +1,5 @@
 <?php
+
 namespace Kfirba\Directo;
 
 class Signature
@@ -21,7 +22,7 @@ class Signature
     /**
      * The signing time.
      *
-     * @var integer
+     * @var int
      */
     protected $time;
 
@@ -57,8 +58,8 @@ class Signature
         }
 
         return [
-            'policy' => $policy,
-            'signature' => $this->keyHash($policy, $this->signingKey(), false)
+            'policy'    => $policy,
+            'signature' => $this->keyHash($policy, $this->signingKey(), false),
         ];
     }
 
@@ -83,6 +84,7 @@ class Signature
      * Extracts the timestamp from the given policy.
      *
      * @param $policy
+     *
      * @return int
      */
     protected function extractTimestampFromBase64EncodedPolicy($policy)
@@ -115,7 +117,7 @@ class Signature
             gmdate('Ymd', $this->time),
             $this->region,
             's3',
-            'aws4_request'
+            'aws4_request',
         ];
     }
 
@@ -125,6 +127,7 @@ class Signature
      * @param      $value
      * @param      $key
      * @param bool $raw
+     *
      * @return string
      */
     protected function keyHash($value, $key, $raw = true)

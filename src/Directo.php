@@ -1,4 +1,5 @@
 <?php
+
 namespace Kfirba\Directo;
 
 use Kfirba\Directo\Exceptions\InvalidACLException;
@@ -10,7 +11,7 @@ class Directo
     /**
      * The signing time.
      *
-     * @var integer
+     * @var int
      */
     protected $time;
 
@@ -85,58 +86,7 @@ class Directo
     }
 
     /**
-     * Normalizes the Options object.
-     *
-     * @param $options
-     * @return Options
-     */
-    protected function normalizeOptions($options)
-    {
-        if (is_null($options)) {
-            return new Options;
-        }
-
-        if (is_array($options)) {
-            return new Options($options);
-        }
-
-        if ($options instanceof Options) {
-            return $options;
-        }
-
-        throw new InvalidOptionsException;
-    }
-
-    /**
-     * Validates the given region against Amazon S3 available regions.
-     *
-     * @param $region
-     * @throws InvalidACLException
-     */
-    protected function validateRegion($region)
-    {
-        $availableRegions = [
-            'us-east-1',
-            'us-east-2',
-            'us-west-1',
-            'us-west-2',
-            'ap-south-1',
-            'ap-northeast-2',
-            'ap-southeast-1',
-            'ap-southeast-2',
-            'ap-northeast-1',
-            'eu-central-1',
-            'eu-west-1',
-            'sa-east-1'
-        ];
-
-        if ( ! in_array($region, $availableRegions)) {
-            throw new InvalidRegionException;
-        }
-    }
-
-    /**
-     * Get the signature
+     * Get the signature.
      *
      * @return string
      */
@@ -149,6 +99,7 @@ class Directo
      * Signs a given json or base64-encoded policy.
      *
      * @param $policy
+     *
      * @return array
      */
     public function sign($policy)
@@ -197,7 +148,7 @@ class Directo
             'X-amz-algorithm'         => 'AWS4-HMAC-SHA256',
             'X-amz-date'              => gmdate('Ymd\THis\Z', $this->time),
             'X-amz-signature'         => $this->signature(),
-            'key'                     => $this->options->default_filename
+            'key'                     => $this->options->default_filename,
         ];
 
         $inputs = array_merge($inputs, $this->options->additional_inputs);
@@ -216,7 +167,8 @@ class Directo
         foreach ($this->inputsAsArray() as $key => $value) {
             $inputs[] = sprintf(
                 '<input type="hidden" name="%s" value="%s"/>',
-                $key, $value
+                $key,
+                $value
             );
         }
 
@@ -241,5 +193,58 @@ class Directo
     public function signingTime()
     {
         return $this->time;
+    }
+
+    /**
+     * Normalizes the Options object.
+     *
+     * @param $options
+     *
+     * @return Options
+     */
+    protected function normalizeOptions($options)
+    {
+        if (is_null($options)) {
+            return new Options;
+        }
+
+        if (is_array($options)) {
+            return new Options($options);
+        }
+
+        if ($options instanceof Options) {
+            return $options;
+        }
+
+        throw new InvalidOptionsException;
+    }
+
+    /**
+     * Validates the given region against Amazon S3 available regions.
+     *
+     * @param $region
+     *
+     * @throws InvalidACLException
+     */
+    protected function validateRegion($region)
+    {
+        $availableRegions = [
+            'us-east-1',
+            'us-east-2',
+            'us-west-1',
+            'us-west-2',
+            'ap-south-1',
+            'ap-northeast-2',
+            'ap-southeast-1',
+            'ap-southeast-2',
+            'ap-northeast-1',
+            'eu-central-1',
+            'eu-west-1',
+            'sa-east-1',
+        ];
+
+        if (! in_array($region, $availableRegions)) {
+            throw new InvalidRegionException;
+        }
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     // The URL to which the client is redirected upon successful upload.
     'success_action_redirect' => '',
 
@@ -36,6 +35,5 @@ return [
 
     // Any additional inputs to add to the form. This is an array of name => value
     // pairs e.g. ['Content-Disposition' => 'attachment']
-    'additional_inputs' => []
-
+    'additional_inputs' => [],
 ];
