@@ -67,7 +67,7 @@ class Policy
             ],
         ];
 
-        $this->addAdditionalInputs($policy);
+        $policy = $this->addAdditionalInputs($policy);
 
         return base64_encode(json_encode($policy));
     }
@@ -105,11 +105,15 @@ class Policy
      * Adds any additional inputs to the policy.
      *
      * @param $policy
+     *
+     * @return array
      */
-    protected function addAdditionalInputs(&$policy)
+    protected function addAdditionalInputs($policy)
     {
         foreach ($this->options->additional_inputs as $name => $value) {
             $policy['conditions'][] = ['starts-with', '$' . $name, $value];
         }
+
+        return $policy;
     }
 }

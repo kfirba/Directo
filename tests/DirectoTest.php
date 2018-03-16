@@ -66,6 +66,17 @@ class DirectoTest extends TestCase
     }
 
     /** @test */
+    function it_merges_given_options()
+    {
+        $directo = new Directo('bucket', 'eu-central-1', 'key', 'secret');
+        $directo->setOptions(['additional_inputs' => ['Content-Disposition' => 'attachment']]);
+
+        $inputs = $directo->inputsAsArray();
+
+        $this->assertArrayHasKey('Content-Disposition', $inputs);
+    }
+
+    /** @test */
     public function it_returns_the_form_inputs_in_html_format()
     {
         $directo = new Directo('bucket', 'eu-central-1', 'key', 'secret');

@@ -14,8 +14,10 @@ class PolicyTest extends TestCase
         $credentials = Mockery::mock(Credentials::class);
         $credentials->shouldReceive('AMZCredentials')->once()->andReturn('key/20161029/region/s3/aws4_request');
 
+        $options = (new Options)->merge(['additional_inputs' => ['Content-Disposition' => 'attachment']]);
+
         $policy = (new Policy(
-            new Options, $credentials, 'bucket', $time)
+            $options, $credentials, 'bucket', $time)
         )->generate();
 
         $this->assertJson(base64_decode($policy));
@@ -32,5 +34,6 @@ class PolicyTest extends TestCase
         $this->assertArrayHasKey('x-amz-credential', $data[7]);
         $this->assertArrayHasKey('x-amz-algorithm', $data[8]);
         $this->assertArrayHasKey('x-amz-date', $data[9]);
+        $this->assertEquals('$Content-Disposition', $data[10][1]);
     }
 }
