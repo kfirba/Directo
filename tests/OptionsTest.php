@@ -2,7 +2,7 @@
 
 use Kfirba\Directo\Options;
 
-class OptionsTest extends PHPUnit_Framework_TestCase
+class OptionsTest extends TestCase
 {
     /** @test */
     public function it_merges_default_options_with_given_options()

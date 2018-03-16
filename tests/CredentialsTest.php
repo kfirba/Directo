@@ -2,7 +2,7 @@
 
 use Kfirba\Directo\Credentials;
 
-class CredentialsTest extends PHPUnit_Framework_TestCase
+class CredentialsTest extends TestCase
 {
     /** @test */
     public function it_returns_amz_credentials()

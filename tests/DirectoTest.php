@@ -6,13 +6,8 @@ use Kfirba\Directo\Policy;
 use Kfirba\Directo\Directo;
 use Kfirba\Directo\Signature;
 
-class DirectoTest extends PHPUnit_Framework_TestCase
+class DirectoTest extends TestCase
 {
-    public function tearDown()
-    {
-        Mockery::close();
-    }
-
     /**
      * @test
      * @expectedException Kfirba\Directo\Exceptions\InvalidRegionException

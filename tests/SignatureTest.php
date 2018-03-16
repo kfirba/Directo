@@ -3,7 +3,7 @@
 use Kfirba\Directo\Policy;
 use Kfirba\Directo\Signature;
 
-class SignatureTest extends PHPUnit_Framework_TestCase
+class SignatureTest extends TestCase
 {
     /** @test */
     public function it_should_generate_the_signature()

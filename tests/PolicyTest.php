@@ -4,7 +4,8 @@ use Kfirba\Directo\Policy;
 use Kfirba\Directo\Options;
 use Kfirba\Directo\Credentials;
 
-class PolicyTest extends PHPUnit_Framework_TestCase
+
+class PolicyTest extends TestCase
 {
     /** @test */
     public function it_generate_base64_encoded_policy()
