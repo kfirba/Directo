@@ -68,7 +68,7 @@ class Policy
 
         $this->addAdditionalInputs($policy);
 
-        return $this->policy = base64_encode(json_encode($policy));
+        return base64_encode(json_encode($policy));
     }
 
     /**

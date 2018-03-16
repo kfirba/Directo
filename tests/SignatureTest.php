@@ -20,4 +20,38 @@ class SignatureTest extends TestCase
         $this->assertTrue(ctype_alnum($signature));
         $this->assertEquals('81c617d1bbd1cc477821f40492d82fb21e7b72824a8b1a9e0a5e8621281c5b90', $signature);
     }
+
+    /** @test */
+    public function it_signs_a_given_json_policy()
+    {
+        $policy = $this->getJsonPolicy();
+        $signature = new Signature('secret', 'eu-central-1', $policy);
+
+        $result = $signature->sign();
+
+        $this->assertEquals($this->getJsonPolicy(), base64_decode($result['policy']));
+
+        $this->assertArrayHasKey('policy', $result);
+        $this->assertArrayHasKey('signature', $result);
+        $this->assertTrue(ctype_alnum($result['signature']));
+        $this->assertTrue(strlen($result['signature']) === 64);
+        $this->assertEquals('e569448322b940de8a6317748475de959866614e81e3d04a7260353d1b5437f1', $result['signature']);
+    }
+
+    /** @test */
+    function it_signs_a_given_base64_encoded_policy()
+    {
+        $policy = base64_encode($this->getJsonPolicy());
+        $signature = new Signature('secret', 'eu-central-1', $policy);
+
+        $result = $signature->sign();
+
+        $this->assertEquals($this->getJsonPolicy(), base64_decode($result['policy']));
+
+        $this->assertArrayHasKey('policy', $result);
+        $this->assertArrayHasKey('signature', $result);
+        $this->assertTrue(ctype_alnum($result['signature']));
+        $this->assertTrue(strlen($result['signature']) === 64);
+        $this->assertEquals('e569448322b940de8a6317748475de959866614e81e3d04a7260353d1b5437f1', $result['signature']);
+    }
 }

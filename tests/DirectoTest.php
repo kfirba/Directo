@@ -1,9 +1,9 @@
 <?php
 
 use Kfirba\Directo\Credentials;
+use Kfirba\Directo\Directo;
 use Kfirba\Directo\Options;
 use Kfirba\Directo\Policy;
-use Kfirba\Directo\Directo;
 use Kfirba\Directo\Signature;
 
 class DirectoTest extends TestCase
@@ -92,5 +92,41 @@ class DirectoTest extends TestCase
 
         $directo = new Directo('bucket', 'eu-central-1', 'key', 'secret', $options);
         $directo->setOptions(['acl' => 'private']);
+    }
+
+    /** @test */
+    function it_delegates_a_json_policy_signature_to_the_signature_object()
+    {
+        $directo = new Directo('bucket', 'eu-central-1', 'key', 'secret');
+
+        $result = $directo->sign($this->getJsonPolicy());
+
+        $policy = base64_decode($result['policy']);
+        $this->assertEquals($this->getJsonPolicy(), $policy);
+        $this->assertNotEquals('bucket', json_decode($policy, true)['conditions'][1]['bucket']);
+
+        $this->assertArrayHasKey('policy', $result);
+        $this->assertArrayHasKey('signature', $result);
+        $this->assertTrue(ctype_alnum($result['signature']));
+        $this->assertTrue(strlen($result['signature']) === 64);
+        $this->assertEquals('e569448322b940de8a6317748475de959866614e81e3d04a7260353d1b5437f1', $result['signature']);
+    }
+
+    /** @test */
+    function it_delegates_a_base64_encoded_policy_signature_to_the_signature_object()
+    {
+        $directo = new Directo('bucket', 'eu-central-1', 'key', 'secret');
+
+        $result = $directo->sign(base64_encode($this->getJsonPolicy()));
+
+        $policy = base64_decode($result['policy']);
+        $this->assertEquals($this->getJsonPolicy(), $policy);
+        $this->assertNotEquals('bucket', json_decode($policy, true)['conditions'][1]['bucket']);
+
+        $this->assertArrayHasKey('policy', $result);
+        $this->assertArrayHasKey('signature', $result);
+        $this->assertTrue(ctype_alnum($result['signature']));
+        $this->assertTrue(strlen($result['signature']) === 64);
+        $this->assertEquals('e569448322b940de8a6317748475de959866614e81e3d04a7260353d1b5437f1', $result['signature']);
     }
 }

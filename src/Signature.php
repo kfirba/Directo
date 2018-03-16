@@ -14,7 +14,7 @@ class Signature
     protected $region;
 
     /**
-     * @var Policy
+     * @var mixed
      */
     protected $policy;
 
@@ -25,7 +25,7 @@ class Signature
      */
     protected $time;
 
-    public function __construct($secret, $region, Policy $policy, $time)
+    public function __construct($secret, $region, $policy, $time = null)
     {
         $this->secret = $secret;
         $this->region = $region;
@@ -40,9 +40,56 @@ class Signature
      */
     public function generate()
     {
-        return $this->signature = $this->keyHash(
-            $this->policy->generate(), $this->signingKey(), false
-        );
+        return $this->sign()['signature'];
+    }
+
+    /**
+     * Signs the given policy (json or base64-encoded).
+     *
+     * @return array
+     */
+    public function sign()
+    {
+        $policy = $this->getBase64EncodedPolicy();
+
+        if (is_null($this->time)) {
+            $this->time = $this->extractTimestampFromBase64EncodedPolicy($policy);
+        }
+
+        return [
+            'policy' => $policy,
+            'signature' => $this->keyHash($policy, $this->signingKey(), false)
+        ];
+    }
+
+    /**
+     * Get base64-encoded policy.
+     *
+     * @return string
+     */
+    protected function getBase64EncodedPolicy()
+    {
+        if ($this->policy instanceof Policy) {
+            return $this->policy->generate();
+        }
+
+        json_decode($this->policy);
+
+        // If there was an error while attempting to json_decode the policy, we assume it is already a base64 policy.
+        return json_last_error() === JSON_ERROR_NONE ? base64_encode($this->policy) : $this->policy;
+    }
+
+    /**
+     * Extracts the timestamp from the given policy.
+     *
+     * @param $policy
+     * @return int
+     */
+    protected function extractTimestampFromBase64EncodedPolicy($policy)
+    {
+        preg_match('/"x-amz-date":"(.+?Z)/i', base64_decode($policy), $matches);
+
+        return \DateTime::createFromFormat('Ymd\THis\Z', $matches[1])->getTimestamp();
     }
 
     /**

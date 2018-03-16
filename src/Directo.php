@@ -25,6 +25,11 @@ class Directo
     protected $region;
 
     /**
+     * @var string
+     */
+    protected $secret;
+
+    /**
      * @var Options
      */
     protected $options;
@@ -71,6 +76,7 @@ class Directo
         $this->time = time();
         $this->bucket = $bucket;
         $this->region = $region;
+        $this->secret = $secret;
         $this->options = $this->normalizeOptions($options);
 
         $this->credentials = $credentials ?: new Credentials($key, $region, $this->time);
@@ -137,6 +143,17 @@ class Directo
     public function signature()
     {
         return $this->signature->generate();
+    }
+
+    /**
+     * Signs a given json or base64-encoded policy.
+     *
+     * @param $policy
+     * @return array
+     */
+    public function sign($policy)
+    {
+        return (new Signature($this->secret, $this->region, $policy))->sign();
     }
 
     /**
